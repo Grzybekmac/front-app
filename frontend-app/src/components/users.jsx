@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import UsersTable from "./usersTable";
 
 class Users extends Component {
@@ -27,6 +28,13 @@ class Users extends Component {
 
     return (
       <div style={{ marginTop: 20 }}>
+        <Link
+          to="/users/new"
+          className="btn btn-primary"
+          style={{ marginBottom: 20 }}
+        >
+          New user
+        </Link>
         <p>Showing {count} users in the database.</p>
         <UsersTable
           users={this.state.users}
