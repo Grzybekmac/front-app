@@ -13,6 +13,7 @@ class UserForm extends Form {
   };
 
   schema = {
+    id: Joi.number(),
     username: Joi.string()
       .required()
       .label("Username"),
