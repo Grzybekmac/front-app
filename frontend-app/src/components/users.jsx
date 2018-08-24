@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import UsersTable from "./usersTable";
+import { getUsers, deleteUser } from "../services/userService";
 
 class Users extends Component {
   state = {
@@ -8,17 +9,28 @@ class Users extends Component {
     sortColumn: { path: "username", order: "asc" }
   };
 
-  componentDidMount() {
-    const users = [];
-    this.setState(users);
+  async componentDidMount() {
+    const { data: users } = await getUsers();
+    this.setState({ users });
   }
 
   handleSort = sortColumn => {
     this.setState({ sortColumn });
   };
 
-  handleDelete = user => {
-    console.log(user.id);
+  handleDelete = async user => {
+    const originalUsers = this.state.users;
+    const users = originalUsers.filter(u => u.id !== user.id);
+    this.setState({ users });
+
+    try {
+      await deleteUser(user.id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) console.log("x");
+      alert("This user has already been deleted.");
+
+      this.setState({ users: originalUsers });
+    }
   };
 
   render() {
